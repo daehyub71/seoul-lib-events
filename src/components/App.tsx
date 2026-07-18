@@ -15,6 +15,7 @@ import CardListView from "./CardListView";
 import EventDetail from "./EventDetail";
 import EventListPanel from "./EventListPanel";
 import FloorPlanView from "./FloorPlanView";
+import CalendarView from "./CalendarView";
 
 // Leaflet은 window에 의존 → 클라이언트 전용 로드 (Next 16에서도 유효한 패턴)
 const MapView = dynamic(() => import("./MapView"), {
@@ -208,9 +209,7 @@ export default function App() {
         </div>
       )}
       {data && view === "calendar" && (
-        <p className="rounded-lg border border-dashed border-slate-300 bg-white py-16 text-center text-slate-400">
-          달력 뷰는 M5에서 구현 예정입니다.
-        </p>
+        <CalendarView events={filtered} today={today} onSelectEvent={setSelected} />
       )}
 
       {selected && (
