@@ -1,5 +1,5 @@
 /**
- * 원본 공공데이터(data/서울도서관 일정 정보.json)를 앱에서 쓰는
+ * 원본 공공데이터(data/seoul-library-schedule.json)를 앱에서 쓰는
  * public/data/events.json으로 변환한다. (PLAN §3)
  *
  * 실행: node scripts/preprocess.mjs  (npm run build 시 prebuild로 자동 실행)
@@ -12,7 +12,9 @@ import { fileURLToPath } from "node:url";
 import { transformRow } from "./normalize.mjs";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const SRC = path.join(ROOT, "data", "서울도서관 일정 정보.json");
+// 주의: 한글 파일명은 macOS(NFD)와 Linux(NFC)의 유니코드 정규화 차이로
+// Vercel 빌드에서 ENOENT가 나므로 ASCII 파일명을 사용한다 (2026-07-18)
+const SRC = path.join(ROOT, "data", "seoul-library-schedule.json");
 const OUT = path.join(ROOT, "public", "data", "events.json");
 
 const raw = JSON.parse(await readFile(SRC, "utf-8"));

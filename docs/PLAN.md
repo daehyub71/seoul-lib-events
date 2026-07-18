@@ -21,7 +21,7 @@
 youtube_src/                          # 여러 프로젝트가 공존하는 상위 작업 폴더
 └─ seoul-lib-events/                  # 본 프로젝트 루트 (git 리포)
    (아래 경로는 모두 seoul-lib-events/ 기준)
-├─ data/서울도서관 일정 정보.json     # 원본 (수정하지 않음)
+├─ data/seoul-library-schedule.json     # 원본 (수정하지 않음)
 ├─ docs/ (SPEC.md, PLAN.md, TASKS.md)
 ├─ scripts/preprocess.mjs            # 원본 → public/data/events.json 변환
 ├─ public/data/events.json           # 전처리 결과 (빌드 산출물, 커밋 포함)

@@ -8,7 +8,7 @@ Built with Next.js 16 (static generation), deployed on Vercel.
 
 ## Data Source
 
-Seoul Metropolitan Library schedule open data (`data/서울도서관 일정 정보.json`), a public dataset of 1,414 schedule records. The raw data is normalized at build time:
+Seoul Metropolitan Library schedule open data (`data/seoul-library-schedule.json`), a public dataset of 1,414 schedule records. The raw data is normalized at build time:
 
 - Schedule type codes are mapped to labels (event / lecture / exhibition / outdoor reading space operation).
 - Inconsistent venue names (e.g. five different spellings of "Librarian Training Room") are unified into 16 standard venues with floor assignments.
@@ -47,7 +47,7 @@ npm start
 
 ## Data Refresh
 
-Replace `data/서울도서관 일정 정보.json` with a newer export, then:
+Replace `data/seoul-library-schedule.json` with a newer export, then:
 
 ```bash
 npm run preprocess   # regenerates public/data/events.json, reports unmatched venues
