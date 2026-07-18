@@ -14,6 +14,7 @@ import FilterBar from "./FilterBar";
 import CardListView from "./CardListView";
 import EventDetail from "./EventDetail";
 import EventListPanel from "./EventListPanel";
+import FloorPlanView from "./FloorPlanView";
 
 // Leaflet은 window에 의존 → 클라이언트 전용 로드 (Next 16에서도 유효한 패턴)
 const MapView = dynamic(() => import("./MapView"), {
@@ -63,7 +64,26 @@ export default function App() {
   const [selected, setSelected] = useState<LibEvent | null>(null);
   // F2 — 지도에서 선택된 지점 (null이면 안내 표시)
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  // F3 — 지도 영역 모드: 실제 지도 ↔ 도서관 층별 뷰
+  const [mapMode, setMapMode] = useState<"geo" | "floor">("geo");
+  const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
   const today = useMemo(todayString, []);
+
+  // 서울도서관 핀 → 층별 뷰 전환, 외부 핀 → 지점 목록 패널 (F2/F3)
+  const handleSelectLocation = useCallback((locationId: string) => {
+    if (locationId === "library") {
+      setMapMode("floor");
+      setSelectedLocation(null);
+      setSelectedVenue(null);
+    } else {
+      setSelectedLocation(locationId);
+    }
+  }, []);
+
+  const backToGeo = useCallback(() => {
+    setMapMode("geo");
+    setSelectedVenue(null);
+  }, []);
 
   const events = useMemo(() => (data ? data.events : []), [data]);
   const filtered = useMemo(() => filterEvents(events, filters), [events, filters]);
@@ -132,13 +152,22 @@ export default function App() {
       {data && view === "map" && (
         <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
           <div className="h-[420px] overflow-hidden rounded-lg border border-slate-200 lg:h-[560px]">
-            <MapView
-              counts={countsByLocation(filtered)}
-              selectedId={selectedLocation}
-              onSelect={setSelectedLocation}
-            />
+            {mapMode === "geo" ? (
+              <MapView
+                counts={countsByLocation(filtered)}
+                selectedId={selectedLocation}
+                onSelect={handleSelectLocation}
+              />
+            ) : (
+              <FloorPlanView
+                events={filtered}
+                selectedVenueId={selectedVenue}
+                onSelectVenue={setSelectedVenue}
+                onBack={backToGeo}
+              />
+            )}
           </div>
-          {selectedLocation ? (
+          {mapMode === "geo" && selectedLocation ? (
             <EventListPanel
               title={MAP_LOCATIONS.find((l) => l.id === selectedLocation)?.name ?? ""}
               events={eventsAtLocation(filtered, selectedLocation)}
@@ -146,11 +175,33 @@ export default function App() {
               onSelect={setSelected}
               onClose={() => setSelectedLocation(null)}
             />
+          ) : mapMode === "floor" && selectedVenue ? (
+            <EventListPanel
+              title={VENUES.find((v) => v.id === selectedVenue)?.name ?? ""}
+              events={filtered.filter((e) => e.venueId === selectedVenue)}
+              today={today}
+              onSelect={setSelected}
+              onClose={() => setSelectedVenue(null)}
+            />
           ) : (
             <div className="flex min-h-40 items-center justify-center rounded-lg border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-400">
-              지도의 핀을 클릭하면
-              <br />
-              해당 지점의 일정이 여기에 표시됩니다.
+              {mapMode === "geo" ? (
+                <>
+                  지도의 핀을 클릭하면
+                  <br />
+                  해당 지점의 일정이 여기에 표시됩니다.
+                  <br />
+                  <span className="mt-1 block text-xs">
+                    (서울도서관 핀은 층별 안내로 전환됩니다)
+                  </span>
+                </>
+              ) : (
+                <>
+                  층별 안내에서 공간을 클릭하면
+                  <br />
+                  해당 공간의 일정이 여기에 표시됩니다.
+                </>
+              )}
             </div>
           )}
         </div>
