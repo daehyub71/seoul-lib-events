@@ -151,7 +151,8 @@ export default function App() {
       )}
       {data && view === "map" && (
         <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
-          <div className="h-[420px] overflow-hidden rounded-lg border border-slate-200 lg:h-[560px]">
+          {/* isolate + z-0: Leaflet 내부 z-index(400~1000)가 모달 위로 새지 않도록 격리 */}
+          <div className="isolate relative z-0 h-[420px] overflow-hidden rounded-lg border border-slate-200 lg:h-[560px]">
             {mapMode === "geo" ? (
               <MapView
                 counts={countsByLocation(filtered)}
