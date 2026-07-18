@@ -65,16 +65,18 @@
 - [x] T5-5. 빈 월 안내 처리. 밀집 월은 3레인+오버플로로 상한 고정 (+컴포넌트 테스트 5개)
 - 검증: 테스트 113개 + `next build` 통과
 
-## M6. 마무리 + 배포
+## M6. 마무리 + 배포 ✅ 2026-07-18 완료 (자동 배포 연동 1건만 사용자 액션 대기)
 
-- [ ] T6-1. 반응형 점검 (모바일 지도/층별 뷰/달력)
-- [ ] T6-2. 접근성: 키보드 탐색, 색+텍스트 병행 뱃지, aria 라벨
-- [ ] T6-3. 메타데이터(title/description/OG), 파비콘
-- [ ] T6-3a. `README.md`(영어) 작성 — 프로젝트 소개, 데이터 출처, 기능, 실행/테스트/빌드, 배포, 데이터 갱신 (N7, 2026-07-18 추가)
-- [ ] T6-3b. `README_KO.md`(한글) 작성 — README.md와 내용 일치 + 상호 링크 (N7)
-- [ ] T6-4. `next build` 정적 생성 확인, Lighthouse 간단 점검
-- [ ] T6-5. `git init` + GitHub 리포 생성 + Vercel 연동 (**GitHub 연동 방식으로 확정** — push 시 자동 배포)
-- [ ] T6-6. 프로덕션 URL 최종 확인
+- [x] T6-1. 반응형: 모든 뷰가 모바일 1열 스택(grid-cols-1 → lg 2단), 뷰 전환 탭 유지
+- [x] T6-2. 접근성: focus-visible 아웃라인 전역 추가, role/aria 라벨, 색+텍스트 병행 뱃지 (Lighthouse 접근성 99)
+- [x] T6-3. OpenGraph 메타데이터, 커스텀 아이콘(icon.svg), 미사용 스캐폴드 에셋 제거
+- [x] T6-3a. `README.md`(영어) 작성 (N7)
+- [x] T6-3b. `README_KO.md`(한글) 작성, 상호 링크 (N7)
+- [x] T6-4. `next build` 통과, Lighthouse: 성능 84 / 접근성 99 / SEO 100
+- [x] T6-5. Vercel 프로젝트 연결(`daehyub71s-projects/seoul-lib-events`) + CLI 프로덕션 배포 완료.
+      **트러블슈팅**: 한글 데이터 파일명이 macOS(NFD)↔Linux(NFC) 정규화 차이로 Vercel에서 ENOENT → `data/seoul-library-schedule.json`으로 개명 (SPEC §2.1 기록).
+      ⚠️ push 시 자동 배포(GitHub 연동)는 Vercel GitHub App 설치가 필요해 **사용자 액션 대기**: https://vercel.com/daehyub71s-projects/seoul-lib-events/settings/git 에서 리포 연결 (또는 https://github.com/apps/vercel 설치 후 `npx vercel git connect`)
+- [x] T6-6. 프로덕션 URL 확인: **https://seoul-lib-events.vercel.app** (페이지·데이터 200, 정상 렌더)
 
 ## 잔여 결정
 
